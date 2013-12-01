@@ -58,14 +58,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 */
 	 
 	/**
-	 * createUser
-	 * ====
 	 * Create a user (only if her/his username is unique).
-	 * Parameters:
-	 *	- username (String): 			User username
-	 *	- password (String): 		Password
-	 *	- email (String): 			Email
-	 *	- cb (Function(bool)):		Callback
+	 * @param {string} username - User username
+	 * @param {string} password - Password
+	 * @param {string} email - Email
+	 * @param {Function(string, bool)} cb - Callback(error, status)
 	 */
 	function createUser(username, password, email, cb) {
 		modelUser.findOne({ username: username }, function(err, user) {
@@ -78,14 +75,12 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		});
 	}
 	/**
-	 * serviceCreateUser
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 * 		- username (String):		User username 	- required
-	 *		- password (String): 	Password 	- required
-	 *		- email (String): 		Email 		- required
+	 * REST Service - CreateUser
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
+	 * 		- username - 	User username 	- required
+	 *		- password -  	Password 		- required
+	 *		- email -  		Email 			- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceCreateUser(req, resp) {
 		logger.info("<Service> CreateUser.");
@@ -99,13 +94,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	}
 	 
 	/**
-	 * getUsers
-	 * ====
 	 * Returns a list of users, ordered by username.
-	 * Parameters:
-	 *	- limit (int): 					Number max of users to return
-	 *	- offset (int): 				Number of the user to start with
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {int} limit - Number max of users to return
+	 * @param {int} offset - Number of the user to start with
+	 * @param {Function(string, User[]} cb - Callback(error, User[])(error, User[])
 	 */
 	function getUsers(limit, offset, cb) {
 		if (!offset) offset = 0;
@@ -117,11 +109,8 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		}
 	}
 	/**
-	 * serviceGetUsers
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
+	 * REST Service - GetUsers
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
 	 *		- limit (int): 		Number max to return				- optional
 	 *		- offset (int): 	Number of the user to start with	- optional
 	 */
@@ -145,23 +134,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 */
 	 
 	/**
-	 * getUser
-	 * ====
 	 * Returns the User corresponding to the given userusername
-	 * Parameters:
-	 *	- username (String): 				Username
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} username - Username
+	 * @param {Function(string, User)} cb - Callback(error, User)
 	 */
 	function getUser(username, cb) {
 		modelUser.findOne({username: username}, {__v:0, _id:0}).lean().exec(cb);
 	}
 	/**
-	 * serviceGetUser
-	 * ====
-	 * Request Var:
+	 * REST Service - GetUser
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- username (string)		Username
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetUser(req, resp) {
 		logger.info("<Service> GetUser.");
@@ -175,23 +158,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	}
 	 
 	/**
-	 * getUserId
-	 * ====
 	 * Returns the User's id
-	 * Parameters:
-	 *	- username (String): 				Username
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} username -  Username
+	 * @param {Function(string, User)} cb -	Callback(error, User)
 	 */
 	function getUserId(username, cb) {
 		modelUser.findOne({username: username}).select('_id').lean().exec(cb);
 	}
 	/**
-	 * serviceGetUserId
-	 * ====
-	 * Request Var:
+	 * REST Service - GetUserId
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- username (string)		Username
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetUserId(req, resp) {
 		logger.info("<Service> GetUserId.");
@@ -205,23 +182,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	}
 	 
 	/**
-	 * getUserEmail
-	 * ====
 	 * Returns the User's email
-	 * Parameters:
-	 *	- username (String): 				Username
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} username - Username
+	 * @param {Function(string, User)} cb -	Callback(error, User)
 	 */
 	function getUserEmail(username, cb) {
 		modelUser.findOne({username: username}).select('email').lean().exec(cb);
 	}
 	/**
-	 * serviceGetUserEmail
-	 * ====
-	 * Request Var:
+	 * REST Service - GetUserEmail
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- username (string)		Username
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetUserEmail(req, resp) {
 		logger.info("<Service> GetUserEmail.");
@@ -235,12 +206,9 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	}
 	 
 	/**
-	 * deleteUser
-	 * ====
 	 * Delete the User corresponding to the given username
-	 * Parameters:
-	 *	- username (String): 				Username
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} username - Username
+	 * @param {Function(string, User)} cb - Callback(error, User)
 	 */
 	function deleteUser(username, cb) {
 		modelUser.findOne({username: username}).exec(function (err, item) {
@@ -255,12 +223,9 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
        });
 	}
 	/**
-	 * serviceDeleteUser
-	 * ====
-	 * Request Var:
+	 * REST Service - DeleteUser
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- username (string)		Username
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceDeleteUser(req, resp) {
 		logger.info("<Service> DeleteUser.");
@@ -275,14 +240,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	
 	
 	/**
-	 * updateUser
-	 * ====
 	 * Update the User corresponding to the given username
-	 * Parameters:
-	 *	- username (String): 			Username
-	 *	- password (String): 		Password
-	 *	- email (String): 			Email
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} username - Username
+	 * @param {string} password - Password
+	 * @param {string} email - Email
+	 * @param {Function(string, User)} cb - Callback(error, User)
 	 */ 
 	function updateUser(username, password, email, cb) {
 		// generate a salt
@@ -301,13 +263,12 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		});	
 	}
 	/**
-	 * serviceUpdateUser
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateUser
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- username (string)		Username
-	 * Request Parameters:
-	 *		- password (String): 	Password 	- required
-	 *		- email (String): 		Email 		- required
+	 *		- password -  	Password 	- required
+	 *		- email -  		Email 		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateUser(req, resp) {
 		logger.info("<Service> UpdateUser.");
@@ -322,13 +283,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	
 	
 	/**
-	 * updateUserEmail
-	 * ====
 	 * Update the email of the User corresponding to the given username
-	 * Parameters:
-	 *	- username (String): 		Username
-	 *	- email (String): 		Email to change
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} username - Username
+	 * @param {string} email -Email to change
+	 * @param {Function(string, User)} cb - Callback(error, User)
 	 */ 
 	function updateUserEmail(username, email, cb) {
 			modelUser.update({ username: username }, {email: email}, { upsert: true, multi: false }, function (err, numberAffected, raw) {
@@ -337,12 +295,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 			});
 	}
 	/**
-	 * serviceUpdateUserEmail
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateUserEmail
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- username (string)		Username
-	 * Request Parameters:
-	 *		- email (String): 		Email 		- required
+	 *		- email -  		Email 		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateUserEmail(req, resp) {
 		logger.info("<Service> UpdateUserEmail.");
@@ -357,13 +314,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	
 	
 	/**
-	 * updateUserPassword
-	 * ====
 	 * Update the password of the User corresponding to the given username
-	 * Parameters:
-	 *	- username (String): 		Username
-	 *	- password (String): 	Password to change
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} username - Username
+	 * @param {string} password - Password to change
+	 * @param {Function(string, User)} cb - Callback(error, User)
 	 */ 
 	function updateUserPassword(username, password, cb) {
 		// generate a salt
@@ -382,12 +336,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		});
 	}
 	/**
-	 * serviceUpdateUserPassword
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateUserPassword
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- username (string)		Username
-	 * Request Parameters:
-	 *		- email (String): 		Email 		- required
+	 *		- email -  		Email 		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateUserPassword(req, resp) {
 		logger.info("<Service> UpdateUserPassword.");
@@ -409,16 +362,14 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * createModel
-	 * ====
 	 * Create a Model
-	 * Parameters:
-	 *	- name (String): 			Model name
-	 *	- file (String): 			Filename
-	 *  - creator (String):			Username of the Creator
-	 *	- creationDate (Date): 		Date of creation
-	 *  - thumbnail (String):		Filename of the thumbnail
-	 *	- tags (String[]): 			Tags (optional)
-	 *	- cb (Function(bool)):		Callback
+	 * @param {string} name -  			Model name
+	 * @param {string} file -  			Filename
+	 *  - creator - 			Username of the Creator
+	 * @param {string} creationDate (Date): 		Date of creation
+	 *  - thumbnail - 		Filename of the thumbnail
+	 * @param {string} tags (String[]): 			Tags (optional)
+	 * @param {string} cb (Function(bool)):		Callback(error, User[])
 	 */
 	function createModel(name, file, creator, creationDate, thumbnail, tags, cb) {
 		var obj = new modelModel({name: name, file: file, creator: creator,  creationDate: creationDate,  thumbnail: thumbnail,  tags: tags});
@@ -427,16 +378,13 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		});
 	}
 	/**
-	 * serviceCreateModel
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 *	- name (String): 			Model name					- required
-	 *	- file (String): 			Filename					- required
-	 *  - creator (String):			Username of the Creator		- required
+	 * REST Service - CreateModel
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
+	 *	- name -  			Model name					- required
+	 *	- file -  			Filename					- required
+	 *  - creator - 			Username of the Creator		- required
 	 *	- creationDate (Date): 		Date of creation			- required
-	 *  - thumbnail (String):		Filename of the thumbnail	- required
+	 *  - thumbnail - 		Filename of the thumbnail	- required
 	 *	- tags (String[]): 			Tags (optional)				- optional
 	 */
 	function serviceCreateModel(req, resp) {
@@ -452,12 +400,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * getModels
-	 * ====
 	 * Returns a list of models, ordered by name.
-	 * Parameters:
-	 *	- limit (int): 					Number max of Model to return
-	 *	- offset (int): 				Number of the Model to start with
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} limit (int): 					Number max of Model to return
+	 * @param {string} offset (int): 				Number of the Model to start with
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function getModels(limit, offset, cb) {
 		if (!offset) offset = 0;
@@ -469,11 +415,8 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		}
 	}
 	/**
-	 * serviceGetModels
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
+	 * REST Service - GetModels
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
 	 *		- limit (int): 		Number max to return					- optional
 	 *		- offset (int): 	Number of the Model to start with	- optional
 	 */
@@ -498,22 +441,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * getModel
-	 * ====
 	 * Returns the Model corresponding to the given id
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function getModel(id, cb) {
 		modelModel.findById(id, {__v:0}).lean().exec(cb);
 	}
 	/**
-	 * serviceGetModel
-	 * ====
-	 * Request Var:
+	 * REST Service - GetModel
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		Model
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetModel(req, resp) {
 		logger.info("<Service> GetModel.");
@@ -528,22 +466,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * getModelName
-	 * ====
 	 * Returns the Model's name
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function getModelName(id, cb) {
 		modelModel.findById(id).select('_id').lean().exec(cb);
 	}
 	/**
-	 * serviceGetModelName
-	 * ====
-	 * Request Var:
+	 * REST Service - GetModelName
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetModelName(req, resp) {
 		logger.info("<Service> GetModelName.");
@@ -558,22 +491,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * getModelFile
-	 * ====
 	 * Returns the Model's file
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function getModelFile(id, cb) {
 		modelModel.findById(id).select('file').lean().exec(cb);
 	}
 	/**
-	 * serviceGetModelFile
-	 * ====
-	 * Request Var:
+	 * REST Service - GetModelFile
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetModelFile(req, resp) {
 		logger.info("<Service> GetModelFile.");
@@ -588,22 +516,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * getModelCreator
-	 * ====
 	 * Returns the Model's file
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function getModelCreator(id, cb) {
 		modelModel.findById(id).select('creator').lean().exec(cb);
 	}
 	/**
-	 * serviceGetModelCreator
-	 * ====
-	 * Request Var:
+	 * REST Service - GetModelCreator
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetModelCreator(req, resp) {
 		logger.info("<Service> GetModelCreator.");
@@ -618,22 +541,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * getModelCreationDate
-	 * ====
 	 * Returns the Model's creation date
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function getModelCreationDate(id, cb) {
 		modelModel.findById(id).select('creationDate').lean().exec(cb);
 	}
 	/**
-	 * serviceGetModelCreationDate
-	 * ====
-	 * Request Var:
+	 * REST Service - GetModelCreationDate
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetModelCreationDate(req, resp) {
 		logger.info("<Service> GetModelCreationDate.");
@@ -648,22 +566,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
  
 	/**
 	 * getModelThumbnail
-	 * ====
 	 * Returns the Model's creation date
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function getModelThumbnail(id, cb) {
 		modelModel.findById(id).select('thumbnail').lean().exec(cb);
 	}
 	/**
-	 * serviceGetModelThumbnail
-	 * ====
-	 * Request Var:
+	 * REST Service - GetModelThumbnail
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetModelThumbnail(req, resp) {
 		logger.info("<Service> GetModelThumbnail.");
@@ -678,22 +591,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * getModelTags
-	 * ====
 	 * Returns the Model's tags
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function getModelTags(id, cb) {
 		modelModel.findById(id).select('tags').lean().exec(cb);
 	}
 	/**
-	 * serviceGetModelTags
-	 * ====
-	 * Request Var:
+	 * REST Service - GetModelTags
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetModelTags(req, resp) {
 		logger.info("<Service> GetModelTags.");
@@ -708,11 +616,9 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * deleteModel
-	 * ====
 	 * Delete the Model corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 						ID
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} id -  						ID
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function deleteModel(id, cb) {
 		modelModel.findById(id).exec(function (err, item) {
@@ -727,12 +633,9 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
        });
 	}
 	/**
-	 * serviceDeleteModel
-	 * ====
-	 * Request Var:
+	 * REST Service - DeleteModel
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceDeleteModel(req, resp) {
 		logger.info("<Service> DeleteModel.");
@@ -747,17 +650,15 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		
 	/**
 	 * updateModel
-	 * ====
 	 * Update the Model corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 				ID
-	 *	- name (String): 			Model name
-	 *	- file (String): 			Filename
-	 *  - creator (String):			Username of the Creator
-	 *	- creationDate (Date): 		Date of creation
-	 *  - thumbnail (String):		Filename of the thumbnail
-	 *	- tags (String[]): 			Tags (optional)
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} id -  				ID
+	 * @param {string} name -  			Model name
+	 * @param {string} file -  			Filename
+	 *  - creator - 			Username of the Creator
+	 * @param {string} creationDate (Date): 		Date of creation
+	 *  - thumbnail - 		Filename of the thumbnail
+	 * @param {string} tags (String[]): 			Tags (optional)
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */ 
 	function updateModel(id, name, file, creator, creationDate, thumbnail, tags, cb) {
 		modelModel.update({ _id: id }, {name: name, file: file, creator: creator,  creationDate: creationDate,  thumbnail: thumbnail,  tags: tags}, { upsert: true, multi: false }, function (err, numberAffected, raw) {
@@ -766,13 +667,12 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		});	
 	}
 	/**
-	 * serviceUpdateModel
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateModel
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- name (string)		Modelname
-	 * Request Parameters:
-	 *		- password (String): 	Password 	- required
-	 *		- email (String): 		Email 		- required
+	 *		- password -  	Password 	- required
+	 *		- email -  		Email 		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateModel(req, resp) {
 		logger.info("<Service> UpdateModel.");
@@ -787,12 +687,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	
 	/**
 	 * updateModelName
-	 * ====
 	 * Update the name of the Model corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 			ID
-	 *	- name (String): 		Name to change
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} id -  			ID
+	 * @param {string} name -  		Name to change
+	 * @param {string} cb (Function(err, User[])):	Callback(error, User[])
 	 */ 
 	function updateModelName(id, name, cb) {
 			modelModel.update({ _id: id }, {name: name}, { upsert: true, multi: false }, function (err, numberAffected, raw) {
@@ -801,12 +699,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 			});
 	}
 	/**
-	 * serviceUpdateModelName
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateModelName
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		Username
-	 * Request Parameters:
-	 *		- name (String): 	Name 		- required
+	 *		- name -  	Name 		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateModelName(req, resp) {
 		logger.info("<Service> UpdateModelName.");
@@ -821,12 +718,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		
 	/**
 	 * updateModelFile
-	 * ====
 	 * Update the file of the Model corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 			ID
-	 *	- name (String): 		File to change
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} id -  			ID
+	 * @param {string} name -  		File to change
+	 * @param {string} cb (Function(err, User[])):	Callback(error, User[])
 	 */ 
 	function updateModelFile(id, name, cb) {
 			modelModel.update({ _id: id }, {file: file}, { upsert: true, multi: false }, function (err, numberAffected, raw) {
@@ -835,12 +730,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 			});
 	}
 	/**
-	 * serviceUpdateModelFile
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateModelFile
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		Username
-	 * Request Parameters:
-	 *		- name (String): 	File 		- required
+	 *		- name -  	File 		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateModelFile(req, resp) {
 		logger.info("<Service> UpdateModelFile.");
@@ -855,12 +749,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		
 	/**
 	 * updateModelCreator
-	 * ====
 	 * Update the creator of the Model corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 			ID
-	 *	- name (String): 		Creator to change
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} id -  			ID
+	 * @param {string} name -  		Creator to change
+	 * @param {string} cb (Function(err, User[])):	Callback(error, User[])
 	 */ 
 	function updateModelCreator(id, name, cb) {
 			modelModel.update({ _id: id }, {creator: creator}, { upsert: true, multi: false }, function (err, numberAffected, raw) {
@@ -869,12 +761,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 			});
 	}
 	/**
-	 * serviceUpdateModelCreator
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateModelCreator
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		Username
-	 * Request Parameters:
-	 *		- name (String): 	Creator 		- required
+	 *		- name -  	Creator 		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateModelCreator(req, resp) {
 		logger.info("<Service> UpdateModelCreator.");
@@ -889,12 +780,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	
 	/**
 	 * updateModelCreationDate
-	 * ====
 	 * Update the creation date of the Model corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 			ID
-	 *	- name (String): 		CreationDate to change
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} id -  			ID
+	 * @param {string} name -  		CreationDate to change
+	 * @param {string} cb (Function(err, User[])):	Callback(error, User[])
 	 */ 
 	function updateModelCreationDate(id, name, cb) {
 			modelModel.update({ _id: id }, {creationDate: creationDate}, { upsert: true, multi: false }, function (err, numberAffected, raw) {
@@ -903,12 +792,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 			});
 	}
 	/**
-	 * serviceUpdateModelCreationDate
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateModelCreationDate
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		Username
-	 * Request Parameters:
-	 *		- name (String): 	CreationDate 		- required
+	 *		- name -  	CreationDate 		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateModelCreationDate(req, resp) {
 		logger.info("<Service> UpdateModelCreationDate.");
@@ -923,12 +811,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	
 	/**
 	 * updateModelThumbnail
-	 * ====
 	 * Update the thumbnail of the Model corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 			ID
-	 *	- name (String): 		Thumbnail to change
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} id -  			ID
+	 * @param {string} name -  		Thumbnail to change
+	 * @param {string} cb (Function(err, User[])):	Callback(error, User[])
 	 */ 
 	function updateModelThumbnail(id, name, cb) {
 			modelModel.update({ _id: id }, {thumbnail: thumbnail}, { upsert: true, multi: false }, function (err, numberAffected, raw) {
@@ -937,12 +823,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 			});
 	}
 	/**
-	 * serviceUpdateModelThumbnail
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateModelThumbnail
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		Username
-	 * Request Parameters:
-	 *		- name (String): 	Thumbnail 		- required
+	 *		- name -  	Thumbnail 		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateModelThumbnail(req, resp) {
 		logger.info("<Service> UpdateModelThumbnail.");
@@ -957,12 +842,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	
 	/**
 	 * updateModelTags
-	 * ====
 	 * Update the tags of the Model corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 			ID
-	 *	- name (String): 		Tags to change
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} id -  			ID
+	 * @param {string} name -  		Tags to change
+	 * @param {string} cb (Function(err, User[])):	Callback(error, User[])
 	 */ 
 	function updateModelTags(id, name, cb) {
 			modelModel.update({ _id: id }, {tags: tags}, { upsert: true, multi: false }, function (err, numberAffected, raw) {
@@ -971,12 +854,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 			});
 	}
 	/**
-	 * serviceUpdateModelTags
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateModelTags
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		Username
-	 * Request Parameters:
-	 *		- name (String): 	Tags 		- required
+	 *		- name -  	Tags 		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateModelTags(req, resp) {
 		logger.info("<Service> UpdateModelTags.");
@@ -998,22 +880,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * getUserModels
-	 * ====
 	 * Returns the models created by an User
-	 * Parameters:
-	 *	- username (String): 				Username
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} username -  				Username
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function getUserModels(username, cb) {
 		modelModel.find({creator: username}, {__v:0}).lean().exec(cb);
 	}
 	/**
-	 * serviceGetUserModels
-	 * ====
-	 * Request Var:
+	 * REST Service - GetUserModels
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- name (string)		name
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetUserModels(req, resp) {
 		logger.info("<Service> GetUserModels.");
@@ -1035,13 +912,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * addRight
-	 * ====
 	 * Add a Right
-	 * Parameters:
-	 *	- modelId (String): 		ID of the model
-	 *	- username (String): 			ID of the user
-	 *	- rightToWrite (bool): 		Flag: false = Read only, true = Read+Write	
-	 *	- cb (Function(bool)):		Callback
+	 * @param {string} modelId -  		ID of the model
+	 * @param {string} username -  			ID of the user
+	 * @param {string} rightToWrite (bool): 		Flag: false = Read only, true = Read+Write	
+	 * @param {string} cb (Function(bool)):		Callback(error, User[])
 	 */
 	function addRight(modelId, username, rightToWrite, cb) {
 		getUserId(username, function(err, id){
@@ -1085,14 +960,12 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		});
 	}
 	/**
-	 * serviceAddRight
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 *	- modelId (String): 		ID of the model				- required
-	 *	- username (String): 			ID of the user				- required
+	 * REST Service - AddRight
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
+	 *	- modelId -  		ID of the model				- required
+	 *	- username -  			ID of the user				- required
 	 *	- rightToWrite (bool): 		Flag for the right to write	- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceAddRight(req, resp) {
 		logger.info("<Service> AddRight.");
@@ -1107,12 +980,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * addCompleteRight
-	 * ====
 	 * Add a Right to Write & Read
-	 * Parameters:
-	 *	- modelId (String): 		ID of the model
-	 *	- username (String): 			ID of the user
-	 *	- cb (Function(bool)):		Callback
+	 * @param {string} modelId -  		ID of the model
+	 * @param {string} username -  			ID of the user
+	 * @param {string} cb (Function(bool)):		Callback(error, User[])
 	 */
 	function addCompleteRight(modelId, username, cb) {
 		getUserId(username, function(err, id){
@@ -1137,14 +1008,12 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		});
 	}
 	/**
-	 * serviceAddCompleteRight
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 *	- modelId (String): 		ID of the model				- required
-	 *	- username (String): 			ID of the user				- required
+	 * REST Service - AddCompleteRight
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
+	 *	- modelId -  		ID of the model				- required
+	 *	- username -  			ID of the user				- required
 	 *	- rightToWrite (bool): 		Flag for the right to write	- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceAddCompleteRight(req, resp) {
 		logger.info("<Service> AddCompleteRight.");
@@ -1159,12 +1028,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * addReadRight
-	 * ====
 	 * Add a Right to Read
-	 * Parameters:
-	 *	- modelId (String): 		ID of the model
-	 *	- username (String): 			ID of the user
-	 *	- cb (Function(bool)):		Callback
+	 * @param {string} modelId -  		ID of the model
+	 * @param {string} username -  			ID of the user
+	 * @param {string} cb (Function(bool)):		Callback(error, User[])
 	 */
 	function addReadRight(modelId, username, cb) {
 		getUserId(username, function(err, id){
@@ -1189,14 +1056,12 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		});
 	}
 	/**
-	 * serviceAddReadRight
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 *	- modelId (String): 		ID of the model				- required
-	 *	- username (String): 			ID of the user				- required
+	 * REST Service - AddReadRight
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
+	 *	- modelId -  		ID of the model				- required
+	 *	- username -  			ID of the user				- required
 	 *	- rightToWrite (bool): 		Flag for the right to write	- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceAddReadRight(req, resp) {
 		logger.info("<Service> AddReadRight.");
@@ -1211,13 +1076,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		
 	/**
 	 * removeRight
-	 * ====
 	 * Remove a Right
-	 * Parameters:
-	 *	- modelId (String): 		ID of the model
-	 *	- username (String): 			ID of the user
-	 *	- rightToWrite (bool): 		Flag: true = remove Write only, false = remove Write+Read
-	 *	- cb (Function(bool)):		Callback
+	 * @param {string} modelId -  		ID of the model
+	 * @param {string} username -  			ID of the user
+	 * @param {string} rightToWrite (bool): 		Flag: true = remove Write only, false = remove Write+Read
+	 * @param {string} cb (Function(bool)):		Callback(error, User[])
 	 */
 	function removeRight(modelId, username, rightToWrite, cb) {
 		getUserId(username, function(err, id){
@@ -1261,13 +1124,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		});
 	}
 	/**
-	 * serviceRemoveRight
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 *	- modelId (String): 		ID of the model				- required
-	 *	- username (String): 			ID of the user				- required
+	 * REST Service - RemoveRight
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
+	 *	- modelId -  		ID of the model				- required
+	 *	- username -  			ID of the user				- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceRemoveRight(req, resp) {
 		logger.info("<Service> RemoveRight.");
@@ -1282,12 +1143,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		
 	/**
 	 * removeCompleteRight
-	 * ====
 	 * Remove a Right to Write & Read
-	 * Parameters:
-	 *	- modelId (String): 		ID of the model
-	 *	- username (String): 			ID of the user
-	 *	- cb (Function(bool)):		Callback
+	 * @param {string} modelId -  		ID of the model
+	 * @param {string} username -  			ID of the user
+	 * @param {string} cb (Function(bool)):		Callback(error, User[])
 	 */
 	function removeCompleteRight(modelId, username, cb) {
 		getUserId(username, function(err, id){
@@ -1312,13 +1171,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		});
 	}
 	/**
-	 * serviceRemoveCompleteRight
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 *	- modelId (String): 		ID of the model				- required
-	 *	- username (String): 			ID of the user				- required
+	 * REST Service - RemoveCompleteRight
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
+	 *	- modelId -  		ID of the model				- required
+	 *	- username -  			ID of the user				- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceRemoveCompleteRight(req, resp) {
 		logger.info("<Service> RemoveCompleteRight.");
@@ -1333,12 +1190,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		
 	/**
 	 * removeWriteRight
-	 * ====
 	 * Remove a Right to Write & Read
-	 * Parameters:
-	 *	- modelId (String): 		ID of the model
-	 *	- username (String): 			ID of the user
-	 *	- cb (Function(bool)):		Callback
+	 * @param {string} modelId -  		ID of the model
+	 * @param {string} username -  			ID of the user
+	 * @param {string} cb (Function(bool)):		Callback(error, User[])
 	 */
 	function removeWriteRight(modelId, username, cb) {
 		getUserId(username, function(err, id){
@@ -1363,13 +1218,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		});
 	}
 	/**
-	 * serviceRemoveWriteRight
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 *	- modelId (String): 		ID of the model				- required
-	 *	- username (String): 			ID of the user				- required
+	 * REST Service - RemoveWriteRight
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
+	 *	- modelId -  		ID of the model				- required
+	 *	- username -  			ID of the user				- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceRemoveWriteRight(req, resp) {
 		logger.info("<Service> RemoveWriteRight.");
@@ -1384,13 +1237,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		 	 
 	/**
 	 * getPersonallyReadableModels
-	 * ====
 	 * Returns a list of Model the User got the personal right to read
-	 * Parameters:
-	 * 	- username (String):				ID of the User
-	 *	- limit (int): 					Number max of Model to return
-	 *	- offset (int): 				Number of the Model to start with
-	 *	- cb (Function(err, Right[])):	Callback
+	 * 	- username - 				ID of the User
+	 * @param {string} limit (int): 					Number max of Model to return
+	 * @param {string} offset (int): 				Number of the Model to start with
+	 * @param {string} cb (Function(err, Right[])):	Callback(error, User[])
 	 */
 	function getPersonallyReadableModels(username, limit, offset, cb) {
 		if (!offset) offset = 0;
@@ -1408,12 +1259,9 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		}
 	}
 	/**
-	 * serviceGetPersonallyReadableModels
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 * 		- username (String):	ID of the User						- required
+	 * REST Service - GetPersonallyReadableModels
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
+	 * 		- username - 	ID of the User						- required
 	 *		- limit (int): 		Number max to return				- optional
 	 *		- offset (int): 	Number of the Right to start with	- optional
 	 */
@@ -1430,13 +1278,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
   
 	/**
 	 * getPersonallyEditableModels
-	 * ====
 	 * Returns a list of Model the User got the personal right to edit
-	 * Parameters:
-	 * 	- username (String):				ID of the User
-	 *	- limit (int): 					Number max of Model to return
-	 *	- offset (int): 				Number of the Model to start with
-	 *	- cb (Function(err, Right[])):	Callback
+	 * 	- username - 				ID of the User
+	 * @param {string} limit (int): 					Number max of Model to return
+	 * @param {string} offset (int): 				Number of the Model to start with
+	 * @param {string} cb (Function(err, Right[])):	Callback(error, User[])
 	 */
 	function getPersonallyEditableModels(username, limit, offset, cb) {
 		if (!offset) offset = 0;
@@ -1454,12 +1300,9 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		}
 	}
 	/**
-	 * serviceGetPersonallyEditableModels
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 * 		- username (String):	ID of the User						- required
+	 * REST Service - GetPersonallyEditableModels
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
+	 * 		- username - 	ID of the User						- required
 	 *		- limit (int): 		Number max to return				- optional
 	 *		- offset (int): 	Number of the Right to start with	- optional
 	 */
@@ -1476,12 +1319,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * getPubliclyReadableModels
-	 * ====
 	 * Returns a list of Model with public consultation
-	 * Parameters:
-	 *	- limit (int): 					Number max of Model to return
-	 *	- offset (int): 				Number of the Model to start with
-	 *	- cb (Function(err, Right[])):	Callback
+	 * @param {string} limit (int): 					Number max of Model to return
+	 * @param {string} offset (int): 				Number of the Model to start with
+	 * @param {string} cb (Function(err, Right[])):	Callback(error, User[])
 	 */
 	function getPubliclyReadableModels(limit, offset, cb) {
 		if (!offset) offset = 0;
@@ -1493,11 +1334,8 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		}
 	}
 	/**
-	 * serviceGetPubliclyReadableModels
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
+	 * REST Service - GetPubliclyReadableModels
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
 	 *		- limit (int): 		Number max to return				- optional
 	 *		- offset (int): 	Number of the Right to start with	- optional
 	 */
@@ -1514,12 +1352,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
  	   
 	/**
 	 * getPubliclyEditableModels
-	 * ====
 	 * Returns a list of Model with public edition
-	 * Parameters:
-	 *	- limit (int): 					Number max of Model to return
-	 *	- offset (int): 				Number of the Model to start with
-	 *	- cb (Function(err, Right[])):	Callback
+	 * @param {string} limit (int): 					Number max of Model to return
+	 * @param {string} offset (int): 				Number of the Model to start with
+	 * @param {string} cb (Function(err, Right[])):	Callback(error, User[])
 	 */
 	function getPubliclyEditableModels(limit, offset, cb) {
 		if (!offset) offset = 0;
@@ -1531,11 +1367,8 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		}
 	}
 	/**
-	 * serviceGetPubliclyEditableModels
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
+	 * REST Service - GetPubliclyEditableModels
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
 	 *		- limit (int): 		Number max to return				- optional
 	 *		- offset (int): 	Number of the Right to start with	- optional
 	 */
@@ -1552,13 +1385,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
  	 	 	 	 
 	/**
 	 * getWriters
-	 * ====
 	 * Returns a list of User the Model can be edited by
-	 * Parameters:
-	 * 	- modelId (String):				ID of the Model
-	 *	- limit (int): 					Number max of User to return
-	 *	- offset (int): 				Number of the User to start with
-	 *	- cb (Function(err, Right[])):	Callback
+	 * 	- modelId - 				ID of the Model
+	 * @param {string} limit (int): 					Number max of User to return
+	 * @param {string} offset (int): 				Number of the User to start with
+	 * @param {string} cb (Function(err, Right[])):	Callback(error, User[])
 	 */
 	function getWriters(modelId, limit, offset, cb) {
 		if (!offset) offset = 0;
@@ -1576,12 +1407,9 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		}
 	}
 	/**
-	 * serviceGetWriters
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 * 		- modelId (String):	ID of the Model						- required
+	 * REST Service - GetWriters
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
+	 * 		- modelId - 	ID of the Model						- required
 	 *		- limit (int): 		Number max to return				- optional
 	 *		- offset (int): 	Number of the Right to start with	- optional
 	 */
@@ -1599,13 +1427,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
  	 	 	 
 	/**
 	 * getReaders
-	 * ====
 	 * Returns a list of User the Model can be edited by
-	 * Parameters:
-	 * 	- modelId (String):				ID of the Model
-	 *	- limit (int): 					Number max of User to return
-	 *	- offset (int): 				Number of the User to start with
-	 *	- cb (Function(err, Right[])):	Callback
+	 * 	- modelId - 				ID of the Model
+	 * @param {string} limit (int): 					Number max of User to return
+	 * @param {string} offset (int): 				Number of the User to start with
+	 * @param {string} cb (Function(err, Right[])):	Callback(error, User[])
 	 */
 	function getReaders(modelId, limit, offset, cb) {
 		if (!offset) offset = 0;
@@ -1623,12 +1449,9 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		}
 	}
 	/**
-	 * serviceGetReaders
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 * 		- modelId (String):	ID of the Model						- required
+	 * REST Service - GetReaders
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
+	 * 		- modelId - 	ID of the Model						- required
 	 *		- limit (int): 		Number max to return				- optional
 	 *		- offset (int): 	Number of the Right to start with	- optional
 	 */
@@ -1645,22 +1468,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * getModelPublicRead
-	 * ====
 	 * Returns the Model's public read flag
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function getModelPublicRead(id, cb) {
 		modelModel.findById(id).select('publicRead').lean().exec(cb);
 	}
 	/**
-	 * serviceGetModelPublicRead
-	 * ====
-	 * Request Var:
+	 * REST Service - GetModelPublicRead
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetModelPublicRead(req, resp) {
 		logger.info("<Service> GetModelPublicRead.");
@@ -1675,22 +1493,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * getModelPublicWrite
-	 * ====
 	 * Returns the Model's public write flag
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function getModelPublicWrite(id, cb) {
 		modelModel.findById(id).select('publicWrite').lean().exec(cb);
 	}
 	/**
-	 * serviceGetModelPublicWrite
-	 * ====
-	 * Request Var:
+	 * REST Service - GetModelPublicWrite
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetModelPublicWrite(req, resp) {
 		logger.info("<Service> GetModelPublicWrite.");
@@ -1705,12 +1518,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * updateModelPublicRead
-	 * ====
 	 * Update the public read flag of the Model corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- flag (bool): 					Flag Value
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} flag (bool): 					Flag Value
+	 * @param {string} cb (Function(err, User[])):	Callback(error, User[])
 	 */ 
 	function updateModelPublicRead(id, flag, cb) {
 			modelModel.update({ _id: id }, {publicRead: flag}, { upsert: true, multi: false }, function (err, numberAffected, raw) {
@@ -1719,12 +1530,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 			});
 	}
 	/**
-	 * serviceUpdateModelPublicRead
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateModelPublicRead
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		Username
-	 * Request Parameters:
 	 *		- flag (bool): 		Flag Value		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateModelPublicRead(req, resp) {
 		logger.info("<Service> UpdateModelPublicRead.");
@@ -1739,12 +1549,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * updateModelPublicWrite
-	 * ====
 	 * Update the public write flag of the Model corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- flag (bool): 					Flag Value
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} flag (bool): 					Flag Value
+	 * @param {string} cb (Function(err, User[])):	Callback(error, User[])
 	 */ 
 	function updateModelPublicWrite(id, flag, cb) {
 			modelModel.update({ _id: id }, {publicWrite: flag}, { upsert: true, multi: false }, function (err, numberAffected, raw) {
@@ -1753,12 +1561,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 			});
 	}
 	/**
-	 * serviceUpdateModelPublicWrite
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateModelPublicWrite
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		Username
-	 * Request Parameters:
 	 *		- flag (bool): 		Flag Value		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateModelPublicWrite(req, resp) {
 		logger.info("<Service> UpdateModelPublicWrite.");
@@ -1780,15 +1587,13 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * createComment
-	 * ====
 	 * Create a Comment.
-	 * Parameters:
-	 *	- modelId (String): 		Model the comment is associated with
-	 *	- author (String): 			User ID of the author
-	 *	- text (String): 			Content
-	 *	- postedDate (Date): 		Date of creation
+	 * @param {string} modelId -  		Model the comment is associated with
+	 * @param {string} author -  			User ID of the author
+	 * @param {string} text -  			Content
+	 * @param {string} postedDate (Date): 		Date of creation
 	 * 	- parentId (String)			ID of the parent comment (optional)
-	 *	- cb (Function(bool)):		Callback
+	 * @param {string} cb (Function(bool)):		Callback(error, User[])
 	 */
 	function createComment(modelId, author, text, postedDate, parentId, cb) {
 		var slug = author+postedDate.toISOString();
@@ -1810,17 +1615,15 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		}
 	}
 	/**
-	 * serviceCreateComment
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 *	- modelId (String): 		Model the comment is associated with	- required
-	 *	- author (String): 			User ID of the author					- required
-	 *	- text (String): 			Content									- required
+	 * REST Service - CreateComment
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
+	 *	- modelId -  		Model the comment is associated with	- required
+	 *	- author -  			User ID of the author					- required
+	 *	- text -  			Content									- required
 	 *	- postedDate (Date): 		Date of creation						- required
 	 * 	- parentId (String)			ID of the parent comment (optional)		- o
-	 *	- cb (Function(bool)):		Callback								- required
+	 *	- cb (Function(bool)):		Callback(error, User[])								- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceCreateComment(req, resp) {
 		logger.info("<Service> CreateComment.");
@@ -1835,12 +1638,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * getComments
-	 * ====
 	 * Returns a list of comments, ordered by date.
-	 * Parameters:
-	 *	- limit (int): 					Number max of users to return
-	 *	- offset (int): 				Number of the comment to start with
-	 *	- cb (Function(err, Comment[])):	Callback
+	 * @param {string} limit (int): 					Number max of users to return
+	 * @param {string} offset (int): 				Number of the comment to start with
+	 * @param {string} cb (Function(err, Comment[])):	Callback(error, User[])
 	 */
 	function getComments(limit, offset, cb) {
 		if (!offset) offset = 0;
@@ -1852,11 +1653,8 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		}
 	}
 	/**
-	 * serviceGetComments
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
+	 * REST Service - GetComments
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
 	 *		- limit (int): 		Number max to return				- optional
 	 *		- offset (int): 	Number of the comment to start with	- optional
 	 */
@@ -1879,22 +1677,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * getComment
-	 * ====
 	 * Returns the Comment corresponding to the given id
-	 * Parameters:
-	 *	- id (String): 						ID
-	 *	- cb (Function(err, Comment[])):	Callback
+	 * @param {string} id -  						ID
+	 * @param {string} cb (Function(err, Comment[])):	Callback(error, User[])
 	 */
 	function getComment(id, cb) {
 		modelComment.findById(id, {__v:0}).lean().exec(cb);
 	}
 	/**
-	 * serviceGetComment
-	 * ====
-	 * Request Var:
+	 * REST Service - GetComment
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		id
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetComment(req, resp) {
 		logger.info("<Service> GetComment.");
@@ -1909,22 +1702,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * getCommentModelId
-	 * ====
 	 * Returns the Comment's modelId
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Comment[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Comment[])):	Callback(error, User[])
 	 */
 	function getCommentModelId(id, cb) {
 		modelComment.findById(id).select('modelId').lean().exec(cb);
 	}
 	/**
-	 * serviceGetCommentModelId
-	 * ====
-	 * Request Var:
+	 * REST Service - GetCommentModelId
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetCommentModelId(req, resp) {
 		logger.info("<Service> GetCommentModelId.");
@@ -1939,22 +1727,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * getCommentAuthor
-	 * ====
 	 * Returns the Comment's author
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Comment[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Comment[])):	Callback(error, User[])
 	 */
 	function getCommentAuthor(id, cb) {
 		modelComment.findById(id).select('author').lean().exec(cb);
 	}
 	/**
-	 * serviceGetCommentAuthor
-	 * ====
-	 * Request Var:
+	 * REST Service - GetCommentAuthor
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetCommentAuthor(req, resp) {
 		logger.info("<Service> GetCommentAuthor.");
@@ -1969,22 +1752,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * getCommentParentId
-	 * ====
 	 * Returns the Comment's parentId
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Comment[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Comment[])):	Callback(error, User[])
 	 */
 	function getCommentParentId(id, cb) {
 		modelComment.findById(id).select('parentId').lean().exec(cb);
 	}
 	/**
-	 * serviceGetCommentParentId
-	 * ====
-	 * Request Var:
+	 * REST Service - GetCommentParentId
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetCommentParentId(req, resp) {
 		logger.info("<Service> GetCommentParentId.");
@@ -1999,22 +1777,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * getCommentSlug
-	 * ====
 	 * Returns the Comment's slug
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Comment[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Comment[])):	Callback(error, User[])
 	 */
 	function getCommentSlug(id, cb) {
 		modelComment.findById(id).select('slug').lean().exec(cb);
 	}
 	/**
-	 * serviceGetCommentSlug
-	 * ====
-	 * Request Var:
+	 * REST Service - GetCommentSlug
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetCommentSlug(req, resp) {
 		logger.info("<Service> GetCommentSlug.");
@@ -2029,22 +1802,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * getCommentPostedDate
-	 * ====
 	 * Returns the Comment's postedDate
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Comment[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Comment[])):	Callback(error, User[])
 	 */
 	function getCommentPostedDate(id, cb) {
 		modelComment.findById(id).select('postedDate').lean().exec(cb);
 	}
 	/**
-	 * serviceGetCommentPostedDate
-	 * ====
-	 * Request Var:
+	 * REST Service - GetCommentPostedDate
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetCommentPostedDate(req, resp) {
 		logger.info("<Service> GetCommentPostedDate.");
@@ -2059,22 +1827,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * getCommentText
-	 * ====
 	 * Returns the Comment's text
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, Comment[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, Comment[])):	Callback(error, User[])
 	 */
 	function getCommentText(id, cb) {
 		modelComment.findById(id).select('text').lean().exec(cb);
 	}
 	/**
-	 * serviceGetCommentText
-	 * ====
-	 * Request Var:
+	 * REST Service - GetCommentText
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetCommentText(req, resp) {
 		logger.info("<Service> GetCommentText.");
@@ -2089,12 +1852,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		
 	/**
 	 * updateCommentText
-	 * ====
 	 * Update the text of the Comment corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 			ID
-	 *	- name (String): 		Text to change
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} id -  			ID
+	 * @param {string} name -  		Text to change
+	 * @param {string} cb (Function(err, User[])):	Callback(error, User[])
 	 */ 
 	function updateCommentText(id, name, cb) {
 			modelComment.update({ _id: id }, {text: text}, { upsert: true, multi: false }, function (err, numberAffected, raw) {
@@ -2103,12 +1864,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 			});
 	}
 	/**
-	 * serviceUpdateCommentText
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateCommentText
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		Username
-	 * Request Parameters:
-	 *		- name (String): 	Text 		- required
+	 *		- name -  	Text 		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateCommentText(req, resp) {
 		logger.info("<Service> UpdateCommentText.");
@@ -2123,11 +1883,9 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * deleteComment
-	 * ====
 	 * Delete the Comment corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 						ID
-	 *	- cb (Function(err, Comment[])):	Callback
+	 * @param {string} id -  						ID
+	 * @param {string} cb (Function(err, Comment[])):	Callback(error, User[])
 	 */
 	function deleteComment(id, cb) {
 		modelComment.findById(id).exec(function (err, item) {
@@ -2142,12 +1900,9 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
        });
 	}
 	/**
-	 * serviceDeleteComment
-	 * ====
-	 * Request Var:
+	 * REST Service - DeleteComment
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceDeleteComment(req, resp) {
 		logger.info("<Service> DeleteComment.");
@@ -2169,22 +1924,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * getUserComments
-	 * ====
 	 * Returns the Comments created by an User
-	 * Parameters:
-	 *	- username (String): 				Username
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} username -  				Username
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function getUserComments(username, cb) {
 		modelComment.find({author: username}, {__v:0}).lean().exec(cb);
 	}
 	/**
-	 * serviceGetUserComments
-	 * ====
-	 * Request Var:
+	 * REST Service - GetUserComments
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- name (string)		name
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetUserComments(req, resp) {
 		logger.info("<Service> GetUserComments.");
@@ -2206,22 +1956,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * getModelComments
-	 * ====
 	 * Returns the Comments created for an Model
-	 * Parameters:
-	 *	- modelId (String): 			Model's ID
-	 *	- cb (Function(err, Model[])):	Callback
+	 * @param {string} modelId -  			Model's ID
+	 * @param {string} cb (Function(err, Model[])):	Callback(error, User[])
 	 */
 	function getModelComments(modelId, cb) {
 		modelComment.find({modelId: modelId}, {__v:0}).lean().exec(cb);
 	}
 	/**
-	 * serviceGetModelComments
-	 * ====
-	 * Request Var:
+	 * REST Service - GetModelComments
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- modelId (string)		modelId
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetModelComments(req, resp) {
 		logger.info("<Service> GetModelComments.");
@@ -2243,11 +1988,9 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * createFile
-	 * ====
 	 * Create a File.
-	 * Parameters:
-	 *	- content (String): 		Content of the File
-	 *	- cb (Function(bool)):		Callback
+	 * @param {string} content -  		Content of the File
+	 * @param {string} cb (Function(bool)):		Callback(error, User[])
 	 */
 	function createFile(content, cb) {
 		var comment = new modelFile({content: content});
@@ -2256,12 +1999,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 		});
 	}
 	/**
-	 * serviceCreateFile
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
-	 *	- content (String): 		Content	- required
+	 * REST Service - CreateFile
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
+	 *	- content -  		Content	- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceCreateFile(req, resp) {
 		logger.info("<Service> CreateFile.");
@@ -2276,12 +2017,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * getFiles
-	 * ====
 	 * Returns a list of Files.
-	 * Parameters:
-	 *	- limit (int): 					Number max of files to return
-	 *	- offset (int): 				Number of the file to start with
-	 *	- cb (Function(err, File[])):	Callback
+	 * @param {string} limit (int): 					Number max of files to return
+	 * @param {string} offset (int): 				Number of the file to start with
+	 * @param {string} cb (Function(err, File[])):	Callback(error, User[])
 	 */
 	function getFiles(limit, offset, cb) {
 		if (!offset) offset = 0;
@@ -2294,11 +2033,8 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	}
 	
 	/**
-	 * serviceGetFiles
-	 * ====
-	 * Request Var:
-	 * 		none
-	 * Request Parameters:
+	 * REST Service - GetFiles
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters:
 	 *		- limit (int): 		Number max to return				- optional
 	 *		- offset (int): 	Number of the comment to start with	- optional
 	 */
@@ -2322,22 +2058,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * getFile
-	 * ====
 	 * Returns the File corresponding to the given id
-	 * Parameters:
-	 *	- id (String): 						ID
-	 *	- cb (Function(err, File[])):	Callback
+	 * @param {string} id -  						ID
+	 * @param {string} cb (Function(err, File[])):	Callback(error, User[])
 	 */
 	function getFile(id, cb) {
 		modelFile.findById(id, {__v:0}).lean().exec(cb);
 	}
 	/**
-	 * serviceGetFile
-	 * ====
-	 * Request Var:
+	 * REST Service - GetFile
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		id
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetFile(req, resp) {
 		logger.info("<Service> GetFile.");
@@ -2352,22 +2083,17 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 
 	/**
 	 * getFileContent
-	 * ====
 	 * Returns the File's content
-	 * Parameters:
-	 *	- id (String): 					ID
-	 *	- cb (Function(err, File[])):	Callback
+	 * @param {string} id -  					ID
+	 * @param {string} cb (Function(err, File[])):	Callback(error, User[])
 	 */
 	function getFileContent(id, cb) {
 		modelFile.findById(id).select('content').lean().exec(cb);
 	}
 	/**
-	 * serviceGetFileContent
-	 * ====
-	 * Request Var:
+	 * REST Service - GetFileContent
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceGetFileContent(req, resp) {
 		logger.info("<Service> GetFileContent.");
@@ -2382,12 +2108,10 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 			
 	/**
 	 * updateFileContent
-	 * ====
 	 * Update the content of the File corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 			ID
-	 *	- name (String): 		Content to change
-	 *	- cb (Function(err, User[])):	Callback
+	 * @param {string} id -  			ID
+	 * @param {string} name -  		Content to change
+	 * @param {string} cb (Function(err, User[])):	Callback(error, User[])
 	 */ 
 	function updateFileContent(id, name, cb) {
 			modelFile.update({ _id: id }, {content: content}, { upsert: true, multi: false }, function (err, numberAffected, raw) {
@@ -2396,12 +2120,11 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 			});
 	}
 	/**
-	 * serviceUpdateFileContent
-	 * ====
-	 * Request Var:
+	 * REST Service - UpdateFileContent
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		Username
-	 * Request Parameters:
-	 *		- name (String): 	Content 		- required
+	 *		- name -  	Content 		- required
+	 * @param {ExpressResponse} resp- Response Object.
 	 */
 	function serviceUpdateFileContent(req, resp) {
 		logger.info("<Service> UpdateFileContent.");
@@ -2416,11 +2139,9 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
 	 
 	/**
 	 * deleteFile
-	 * ====
 	 * Delete the File corresponding to the given ID
-	 * Parameters:
-	 *	- id (String): 						ID
-	 *	- cb (Function(err, File[])):	Callback
+	 * @param {string} id -  						ID
+	 * @param {string} cb (Function(err, File[])):	Callback(error, User[])
 	 */
 	function deleteFile(id, cb) {
 		modelFile.findById(id).exec(function (err, item) {
@@ -2435,12 +2156,9 @@ module.exports = function(mongoose, modelUser, modelModel, modelComment, modelFi
        });
 	}
 	/**
-	 * serviceDeleteFile
-	 * ====
-	 * Request Var:
+	 * REST Service - DeleteFile
+	 * @param {ExpressRequest} req - Request Object. Should contain the following parameters: 
 	 * 		- id (string)		ID
-	 * Request Parameters:
-	 *		-none
 	 */
 	function serviceDeleteFile(req, resp) {
 		logger.info("<Service> DeleteFile.");
